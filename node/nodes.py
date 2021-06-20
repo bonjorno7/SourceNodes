@@ -39,14 +39,14 @@ class SourceGeometryNode(Node, SourceBaseNode):
         default='OBJECT',
     )
 
-    input_object: PointerProperty(
-        name='Input Object',
+    object: PointerProperty(
+        name='Object',
         description='The object to get geometry from',
         type=Object,
     )
 
-    input_collection: PointerProperty(
-        name='Input Collection',
+    collection: PointerProperty(
+        name='Collection',
         description='The collection to get geometry from',
         type=Collection,
     )
@@ -72,8 +72,8 @@ class SourceGeometryNode(Node, SourceBaseNode):
         '''Copy values from another node'''
         self.command = node.command
         self.input_type = node.input_type
-        self.input_object = node.input_object
-        self.input_collection = node.input_collection
+        self.object = node.object
+        self.collection = node.collection
         self.file_type = node.file_type
 
     def draw_buttons(self, context: Context, layout: UILayout):
@@ -82,19 +82,19 @@ class SourceGeometryNode(Node, SourceBaseNode):
         layout.prop(self, 'input_type', text='')
 
         if self.input_type == 'OBJECT':
-            layout.prop(self, 'input_object', text='')
+            layout.prop(self, 'object', text='')
         elif self.input_type == 'COLLECTION':
-            layout.prop(self, 'input_collection', text='')
+            layout.prop(self, 'collection', text='')
 
         layout.prop(self, 'file_type', text='')
         layout.operator('sourcenodes.export_geometry').node = repr(self)
 
     def draw_label(self) -> str:
         '''Draw node label'''
-        if self.input_type == 'OBJECT' and self.input_object:
-            return self.input_object.name
-        elif self.input_type == 'COLLECTION' and self.input_collection:
-            return self.input_collection.name
+        if self.input_type == 'OBJECT' and self.object:
+            return self.object.name
+        elif self.input_type == 'COLLECTION' and self.collection:
+            return self.collection.name
         else:
             return self.bl_label
 
@@ -113,8 +113,8 @@ class SourceAnimationNode(Node, SourceBaseNode):
         default='$sequence',
     )
 
-    input_action: PointerProperty(
-        name='Input Action',
+    action: PointerProperty(
+        name='Action',
         description='The action to export',
         type=Action,
     )
@@ -138,21 +138,21 @@ class SourceAnimationNode(Node, SourceBaseNode):
     def copy(self, node: Node):
         '''Copy values from another node'''
         self.command = node.command
-        self.input_action = node.input_action
+        self.action = node.action
         self.file_type = node.file_type
 
     def draw_buttons(self, context: Context, layout: UILayout):
         '''Draw node properties'''
         layout.prop(self, 'command', text='')
-        layout.prop(self, 'input_action', text='')
+        layout.prop(self, 'action', text='')
 
         layout.prop(self, 'file_type', text='')
         layout.operator('sourcenodes.export_animation').node = repr(self)
 
     def draw_label(self) -> str:
         '''Draw node label'''
-        if self.input_action:
-            return self.input_action.name
+        if self.action:
+            return self.action.name
         else:
             return self.bl_label
 
