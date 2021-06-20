@@ -1,4 +1,4 @@
-from ..node.nodes import SourceBodyNode
+from ..node.nodes import SourceBodyNode, SourceSequenceNode
 from . import fbx, smd
 
 
@@ -19,3 +19,10 @@ def export_body(node: SourceBodyNode):
         smd.export_body(objects)
     elif node.file_type == 'FBX':
         fbx.export_body(objects)
+
+
+def export_sequence(node: SourceSequenceNode):
+    object = node.input_object
+    action = node.input_action
+
+    smd.export_sequence(object, action)

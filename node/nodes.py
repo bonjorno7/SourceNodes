@@ -1,8 +1,8 @@
 import bpy
 from bpy.props import EnumProperty, PointerProperty
-from bpy.types import Collection, Context, Node, NodeTree, Object, UILayout
+from bpy.types import Action, Collection, Context, Node, NodeTree, Object, UILayout
 
-from .sockets import SourceBodySocket
+from .sockets import SourceBodySocket, SourceSequenceSocket
 from .tree import SourceNodeTree
 
 
@@ -96,7 +96,64 @@ class SourceBodyNode(Node, SourceBaseNode):
             return self.bl_label
 
 
-classes = (SourceBodyNode,)
+class SourceSequenceNode(Node, SourceBaseNode):
+    '''Sequence which takes an action from an object'''
+    bl_label = 'Sequence'
+    bl_icon = 'SEQUENCE'
+
+    command: EnumProperty(
+        name='Command',
+        description='Which QC command to use for this sequence',
+        items=[
+            ('$sequence', '$sequence', 'Use $sequence in the QC'),
+        ],
+        default='$sequence',
+    )
+
+    input_object: PointerProperty(
+        name='Input Object',
+        description='The object to get the action from',
+        type=Object,
+    )
+
+    input_action: PointerProperty(
+        name='Input Action',
+        description='The action to export',
+        type=Action,
+    )
+
+    def init(self, context: Context):
+        '''Initialize new node'''
+        self.outputs.new(
+            SourceSequenceSocket.__name__,
+            SourceSequenceSocket.bl_label,
+        )
+
+    def copy(self, node: Node):
+        '''Copy values from other node'''
+        self.command = node.command
+        self.input_object = node.input_object
+        self.input_action = node.input_action
+
+    def draw_buttons(self, context: Context, layout: UILayout):
+        '''Draw node properties'''
+        layout.prop(self, 'command', text='')
+        layout.prop(self, 'input_object', text='')
+        layout.prop(self, 'input_action', text='')
+        layout.operator('sourcenodes.export_sequence').node = repr(self)
+
+    def draw_label(self) -> str:
+        '''Draw node label'''
+        if self.input_action:
+            return self.input_action.name
+        else:
+            return self.bl_label
+
+
+classes = (
+    SourceBodyNode,
+    SourceSequenceNode,
+)
 
 
 def register():

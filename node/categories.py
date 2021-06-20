@@ -1,7 +1,7 @@
 import nodeitems_utils
 from nodeitems_utils import NodeCategory, NodeItem
 
-from .nodes import SourceBodyNode
+from .nodes import SourceBodyNode, SourceSequenceNode
 from .tree import SourceNodeTree
 
 
@@ -16,19 +16,11 @@ class SourceNodeCategory(NodeCategory):
 
 node_categories = [
     SourceNodeCategory(
-        'SOURCE_BODY_NODES',
-        'Body',
+        'SOURCE_NODES_ALL',
+        'Nodes',
         items=[
-            NodeItem(
-                SourceBodyNode.__name__,
-                label='$body',
-                settings={'command': repr('$body')},
-            ),
-            NodeItem(
-                SourceBodyNode.__name__,
-                label='$model',
-                settings={'command': repr('$model')},
-            ),
+            NodeItem(SourceBodyNode.__name__),
+            NodeItem(SourceSequenceNode.__name__),
         ],
     ),
 ]

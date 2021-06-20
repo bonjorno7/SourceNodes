@@ -1,6 +1,9 @@
-from . import export_body
+from . import export_body, export_sequence
 
-modules = (export_body,)
+modules = (
+    export_body,
+    export_sequence,
+)
 
 
 def register():
