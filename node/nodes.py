@@ -113,12 +113,6 @@ class SourceAnimationNode(Node, SourceBaseNode):
         default='$sequence',
     )
 
-    input_object: PointerProperty(
-        name='Input Object',
-        description='The object to get the action from',
-        type=Object,
-    )
-
     input_action: PointerProperty(
         name='Input Action',
         description='The action to export',
@@ -144,15 +138,12 @@ class SourceAnimationNode(Node, SourceBaseNode):
     def copy(self, node: Node):
         '''Copy values from another node'''
         self.command = node.command
-        self.input_object = node.input_object
         self.input_action = node.input_action
         self.file_type = node.file_type
 
     def draw_buttons(self, context: Context, layout: UILayout):
         '''Draw node properties'''
         layout.prop(self, 'command', text='')
-
-        layout.prop(self, 'input_object', text='')
         layout.prop(self, 'input_action', text='')
 
         layout.prop(self, 'file_type', text='')
