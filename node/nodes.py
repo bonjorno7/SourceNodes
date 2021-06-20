@@ -61,6 +61,25 @@ class SourceGeometryNode(Node, SourceBaseNode):
         default='SMD',
     )
 
+    @property
+    def file_name(self) -> str:
+        '''The file name for this node'''
+        if self.input_type == 'OBJECT' and self.object:
+            stem = self.object.name
+        elif self.input_type == 'COLLECTION' and self.collection:
+            stem = self.collection.name
+        else:
+            stem = 'Geometry'
+
+        if self.file_type == 'SMD':
+            suffix = '.smd'
+        elif self.file_type == 'FBX':
+            suffix = '.fbx'
+        else:
+            suffix = ''
+
+        return stem + suffix
+
     def init(self, context: Context):
         '''Initialize a new node'''
         self.outputs.new(
@@ -127,6 +146,21 @@ class SourceAnimationNode(Node, SourceBaseNode):
         ],
         default='SMD',
     )
+
+    @property
+    def file_name(self) -> str:
+        '''The file name for this node'''
+        if self.action:
+            stem = self.action.name
+        else:
+            stem = 'Animation'
+
+        if self.file_type == 'SMD':
+            suffix = '.smd'
+        else:
+            suffix = ''
+
+        return stem + suffix
 
     def init(self, context: Context):
         '''Initialize a new node'''
