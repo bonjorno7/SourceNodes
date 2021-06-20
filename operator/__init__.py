@@ -1,8 +1,9 @@
-from . import export_animation, export_geometry
+from . import export_animation, export_geometry, export_script
 
 modules = (
     export_geometry,
     export_animation,
+    export_script,
 )
 
 

@@ -1,7 +1,8 @@
 from pathlib import Path
 
-from ..node.nodes import SourceAnimationNode, SourceGeometryNode
-from . import fbx, smd
+from ..node.nodes import (SourceAnimationNode, SourceGeometryNode,
+                          SourceScriptNode)
+from . import fbx, qc, smd
 
 
 def export_geometry(node: SourceGeometryNode):
@@ -34,3 +35,11 @@ def export_animation(node: SourceAnimationNode):
 
         if node.file_type == 'SMD':
             smd.export_animation(path, node.action)
+
+
+def export_script(node: SourceScriptNode):
+    '''Export script to a file'''
+    if node.name:
+        path = Path.home().joinpath('Desktop', node.file_name)
+
+        qc.export_script(path, node.name)

@@ -1,8 +1,9 @@
 import bpy
-from bpy.props import EnumProperty, PointerProperty
-from bpy.types import Action, Collection, Context, Node, NodeTree, Object, UILayout
+from bpy.props import EnumProperty, PointerProperty, StringProperty
+from bpy.types import (Action, Collection, Context, Node, NodeTree, Object,
+                       UILayout)
 
-from .sockets import SourceGeometrySocket, SourceAnimationSocket
+from .sockets import SourceAnimationSocket, SourceGeometrySocket
 from .tree import SourceNodeTree
 
 
@@ -191,9 +192,60 @@ class SourceAnimationNode(Node, SourceBaseNode):
             return self.bl_label
 
 
+class SourceScriptNode(Node, SourceBaseNode):
+    '''Node which combines geometry and animation in a script'''
+    bl_label = 'Script'
+    bl_icon = 'TEXT'
+
+    name: StringProperty(
+        name='Name',
+        description='Path relative to the models folder',
+        default='example/model',
+    )
+
+    @property
+    def file_name(self) -> str:
+        '''The file name for this node'''
+        if self.name:
+            stem = self.name.split('/')[-1]
+        else:
+            stem = 'Script'
+
+        return stem + '.qc'
+
+    def init(self, context: Context):
+        '''Initialize a new node'''
+        self.inputs.new(
+            SourceGeometrySocket.__name__,
+            SourceGeometrySocket.bl_label,
+        )
+
+        self.inputs.new(
+            SourceAnimationSocket.__name__,
+            SourceAnimationSocket.bl_label,
+        )
+
+    def copy(self, node: Node):
+        '''Copy values from another node'''
+        self.name = node.name
+
+    def draw_buttons(self, context: Context, layout: UILayout):
+        '''Draw node properties'''
+        layout.prop(self, 'name', text='')
+        layout.operator('sourcenodes.export_script').node = repr(self)
+
+    def draw_label(self) -> str:
+        '''Draw node label'''
+        if self.name:
+            return self.name
+        else:
+            return self.bl_label
+
+
 classes = (
     SourceGeometryNode,
     SourceAnimationNode,
+    SourceScriptNode,
 )
 
 
