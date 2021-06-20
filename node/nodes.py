@@ -2,7 +2,7 @@ import bpy
 from bpy.props import EnumProperty, PointerProperty
 from bpy.types import Action, Collection, Context, Node, NodeTree, Object, UILayout
 
-from .sockets import SourceBodySocket, SourceSequenceSocket
+from .sockets import SourceGeometrySocket, SourceAnimationSocket
 from .tree import SourceNodeTree
 
 
@@ -14,27 +14,27 @@ class SourceBaseNode:
         return ntree.bl_idname == SourceNodeTree.__name__
 
 
-class SourceBodyNode(Node, SourceBaseNode):
-    '''Body which takes geometry from an object or collection'''
-    bl_label = 'Body'
+class SourceGeometryNode(Node, SourceBaseNode):
+    '''Node which takes geometry from an object or collection'''
+    bl_label = 'Geometry'
     bl_icon = 'CUBE'
 
     command: EnumProperty(
         name='Command',
-        description='Which QC command to use for this body',
+        description='Which QC command to use for this node',
         items=[
-            ('$body', '$body', 'Use $body in the QC'),
-            ('$model', '$model', 'Use $model in the QC'),
+            ('$body', '$body', ''),
+            ('$model', '$model', ''),
         ],
         default='$body',
     )
 
     input_type: EnumProperty(
         name='Input Type',
-        description='Where to get the geometry for this body',
+        description='Where to get the geometry for this node',
         items=[
-            ('OBJECT', 'Object', 'Get geometry from a single object'),
-            ('COLLECTION', 'Collection', 'Get geometry from a collection'),
+            ('OBJECT', 'Object', ''),
+            ('COLLECTION', 'Collection', ''),
         ],
         default='OBJECT',
     )
@@ -53,20 +53,23 @@ class SourceBodyNode(Node, SourceBaseNode):
 
     file_type: EnumProperty(
         name='File Type',
-        description='What file type to export this body as',
+        description='What file type to export this node as',
         items=[
-            ('SMD', 'SMD', 'Export this body as SMD file'),
-            ('FBX', 'FBX', 'Export this body as FBX file'),
+            ('SMD', 'SMD', ''),
+            ('FBX', 'FBX', ''),
         ],
         default='SMD',
     )
 
     def init(self, context: Context):
-        '''Initialize new node'''
-        self.outputs.new(SourceBodySocket.__name__, self.bl_label)
+        '''Initialize a new node'''
+        self.outputs.new(
+            SourceGeometrySocket.__name__,
+            SourceGeometrySocket.bl_label,
+        )
 
     def copy(self, node: Node):
-        '''Copy values from other node'''
+        '''Copy values from another node'''
         self.command = node.command
         self.input_type = node.input_type
         self.input_object = node.input_object
@@ -84,7 +87,7 @@ class SourceBodyNode(Node, SourceBaseNode):
             layout.prop(self, 'input_collection', text='')
 
         layout.prop(self, 'file_type', text='')
-        layout.operator('sourcenodes.export_body').node = repr(self)
+        layout.operator('sourcenodes.export_geometry').node = repr(self)
 
     def draw_label(self) -> str:
         '''Draw node label'''
@@ -96,16 +99,16 @@ class SourceBodyNode(Node, SourceBaseNode):
             return self.bl_label
 
 
-class SourceSequenceNode(Node, SourceBaseNode):
-    '''Sequence which takes an action from an object'''
-    bl_label = 'Sequence'
+class SourceAnimationNode(Node, SourceBaseNode):
+    '''Node which takes an action from an object'''
+    bl_label = 'Animation'
     bl_icon = 'SEQUENCE'
 
     command: EnumProperty(
         name='Command',
-        description='Which QC command to use for this sequence',
+        description='Which QC command to use for this node',
         items=[
-            ('$sequence', '$sequence', 'Use $sequence in the QC'),
+            ('$sequence', '$sequence', ''),
         ],
         default='$sequence',
     )
@@ -122,25 +125,38 @@ class SourceSequenceNode(Node, SourceBaseNode):
         type=Action,
     )
 
+    file_type: EnumProperty(
+        name='File Type',
+        description='What file type to export this node as',
+        items=[
+            ('SMD', 'SMD', ''),
+        ],
+        default='SMD',
+    )
+
     def init(self, context: Context):
-        '''Initialize new node'''
+        '''Initialize a new node'''
         self.outputs.new(
-            SourceSequenceSocket.__name__,
-            SourceSequenceSocket.bl_label,
+            SourceAnimationSocket.__name__,
+            SourceAnimationSocket.bl_label,
         )
 
     def copy(self, node: Node):
-        '''Copy values from other node'''
+        '''Copy values from another node'''
         self.command = node.command
         self.input_object = node.input_object
         self.input_action = node.input_action
+        self.file_type = node.file_type
 
     def draw_buttons(self, context: Context, layout: UILayout):
         '''Draw node properties'''
         layout.prop(self, 'command', text='')
+
         layout.prop(self, 'input_object', text='')
         layout.prop(self, 'input_action', text='')
-        layout.operator('sourcenodes.export_sequence').node = repr(self)
+
+        layout.prop(self, 'file_type', text='')
+        layout.operator('sourcenodes.export_animation').node = repr(self)
 
     def draw_label(self) -> str:
         '''Draw node label'''
@@ -151,8 +167,8 @@ class SourceSequenceNode(Node, SourceBaseNode):
 
 
 classes = (
-    SourceBodyNode,
-    SourceSequenceNode,
+    SourceGeometryNode,
+    SourceAnimationNode,
 )
 
 

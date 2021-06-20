@@ -5,7 +5,7 @@ from bpy.types import NodeTree
 class SourceNodeTree(NodeTree):
     '''Node based export for Source models'''
     bl_label = 'Source Nodes'
-    bl_icon = 'NODETREE'
+    bl_icon = 'FILE_3D'
 
 
 classes = (SourceNodeTree,)

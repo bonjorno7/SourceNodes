@@ -1,24 +1,24 @@
 import bpy
 from bpy.types import Context, Operator
-from ..sdk.file import export_sequence
+from ..sdk.file import export_geometry
 
 
-class SOURCENODES_OT_export_sequence(Operator):
-    bl_idname = 'sourcenodes.export_sequence'
-    bl_label = 'Export Sequence'
-    bl_description = 'Export the given sequence to a file'
+class SOURCENODES_OT_export_geometry(Operator):
+    bl_idname = 'sourcenodes.export_geometry'
+    bl_label = 'Export'
+    bl_description = 'Export the given geometry to a file'
     bl_options = {'REGISTER', 'INTERNAL'}
 
     node: bpy.props.StringProperty(options={'HIDDEN'})
 
     def execute(self, context: Context) -> set:
         node = eval(self.node)
-        export_sequence(node)
+        export_geometry(node)
 
         return {'FINISHED'}
 
 
-classes = (SOURCENODES_OT_export_sequence,)
+classes = (SOURCENODES_OT_export_geometry,)
 
 
 def register():

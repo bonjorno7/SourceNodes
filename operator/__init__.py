@@ -1,8 +1,8 @@
-from . import export_body, export_sequence
+from . import export_animation, export_geometry
 
 modules = (
-    export_body,
-    export_sequence,
+    export_geometry,
+    export_animation,
 )
 
 

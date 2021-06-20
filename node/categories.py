@@ -1,7 +1,7 @@
 import nodeitems_utils
 from nodeitems_utils import NodeCategory, NodeItem
 
-from .nodes import SourceBodyNode, SourceSequenceNode
+from .nodes import SourceGeometryNode, SourceAnimationNode
 from .tree import SourceNodeTree
 
 
@@ -19,8 +19,8 @@ node_categories = [
         'SOURCE_NODES_ALL',
         'Nodes',
         items=[
-            NodeItem(SourceBodyNode.__name__),
-            NodeItem(SourceSequenceNode.__name__),
+            NodeItem(SourceGeometryNode.__name__),
+            NodeItem(SourceAnimationNode.__name__),
         ],
     ),
 ]

@@ -1,8 +1,9 @@
-from ..node.nodes import SourceBodyNode, SourceSequenceNode
+from ..node.nodes import SourceGeometryNode, SourceAnimationNode
 from . import fbx, smd
 
 
-def export_body(node: SourceBodyNode):
+def export_geometry(node: SourceGeometryNode):
+    '''Export geometry to a file'''
     objects = []
 
     if node.input_type == 'OBJECT' and node.input_object:
@@ -15,14 +16,17 @@ def export_body(node: SourceBodyNode):
         if armature and (armature not in objects):
             objects.append(armature)
 
-    if node.file_type == 'SMD':
-        smd.export_body(objects)
-    elif node.file_type == 'FBX':
-        fbx.export_body(objects)
+    if objects:
+        if node.file_type == 'SMD':
+            smd.export_geometry(objects)
+        elif node.file_type == 'FBX':
+            fbx.export_geometry(objects)
 
 
-def export_sequence(node: SourceSequenceNode):
+def export_animation(node: SourceAnimationNode):
+    '''Export animation to a file'''
     object = node.input_object
     action = node.input_action
 
-    smd.export_sequence(object, action)
+    if object and action:
+        smd.export_animation(object, action)
