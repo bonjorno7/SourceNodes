@@ -1,10 +1,10 @@
-# Python Template
+# Source Nodes
 
-The goal is an environment that makes sure all contributed code is up to standard.
+Blender node based export for Source models.
 
 ## Development
 
-Use Visual Studio Code or another editor that supports EditorConfig, Python, YAPF, and Pylint.
+Use Visual Studio Code or another editor that supports EditorConfig, Python, and YAPF.
 
 ### Install VSCode Extensions
 
@@ -14,4 +14,3 @@ Use Visual Studio Code or another editor that supports EditorConfig, Python, YAP
 ### Install Python Libraries
 
 -   yapf
--   pylint
