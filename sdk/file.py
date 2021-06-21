@@ -39,7 +39,7 @@ def export_animation(node: SourceAnimationNode):
 
 def export_script(node: SourceScriptNode):
     '''Export script to a file'''
-    if node.name:
+    if node.model_name:
         path = Path.home().joinpath('Desktop', node.file_name)
 
-        qc.export_script(path, node.name)
+        qc.export_script(path, node.model_name)

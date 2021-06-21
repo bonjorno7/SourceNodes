@@ -197,8 +197,8 @@ class SourceScriptNode(Node, SourceBaseNode):
     bl_label = 'Script'
     bl_icon = 'TEXT'
 
-    name: StringProperty(
-        name='Name',
+    model_name: StringProperty(
+        name='Model Name',
         description='Path relative to the models folder',
         default='example/model',
     )
@@ -206,8 +206,8 @@ class SourceScriptNode(Node, SourceBaseNode):
     @property
     def file_name(self) -> str:
         '''The file name for this node'''
-        if self.name:
-            stem = self.name.split('/')[-1]
+        if self.model_name:
+            stem = self.model_name.split('/')[-1]
         else:
             stem = 'Script'
 
@@ -227,17 +227,17 @@ class SourceScriptNode(Node, SourceBaseNode):
 
     def copy(self, node: Node):
         '''Copy values from another node'''
-        self.name = node.name
+        self.model_name = node.model_name
 
     def draw_buttons(self, context: Context, layout: UILayout):
         '''Draw node properties'''
-        layout.prop(self, 'name', text='')
+        layout.prop(self, 'model_name', text='')
         layout.operator('sourcenodes.export_script').node = repr(self)
 
     def draw_label(self) -> str:
         '''Draw node label'''
-        if self.name:
-            return self.name
+        if self.model_name:
+            return self.model_name
         else:
             return self.bl_label
 
