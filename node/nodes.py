@@ -21,12 +21,6 @@ class SourceBaseNode:
 class SourceDynamicNode:
     '''Mixin class for dynamic nodes'''
 
-    def remove_unlinked_sockets(self, socket_types: Tuple[type]):
-        '''Remove unlinked inputs of the given types'''
-        for socket in self.inputs:
-            if isinstance(socket, socket_types) and not socket.is_linked:
-                self.inputs.remove(socket)
-
     def ensure_virtual_socket(self) -> NodeSocketVirtual:
         '''Create a virtual input socket if one does not exist'''
         for socket in self.inputs:
@@ -283,7 +277,6 @@ class SourceScriptNode(Node, SourceBaseNode, SourceDynamicNode):
             SourceAnimationSocket,
         )
 
-        self.remove_unlinked_sockets(socket_types)
         self.handle_virtual_socket(socket_types)
         self.sort_sockets(socket_types)
 
