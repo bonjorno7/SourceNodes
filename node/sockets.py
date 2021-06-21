@@ -3,7 +3,7 @@ from bpy.types import Context, Node, NodeSocket, UILayout
 
 
 class SourceGeometrySocket(NodeSocket):
-    '''Socket to connect a Geometry node to a Body Group or Model node'''
+    '''Socket to connect a Geometry node to a Body Group or Script node'''
     bl_label = 'Geometry'
 
     def draw(self, context: Context, layout: UILayout, node: Node, text: str):
@@ -16,7 +16,7 @@ class SourceGeometrySocket(NodeSocket):
 
 
 class SourceAnimationSocket(NodeSocket):
-    '''Socket to connect an Animation node to a Model node'''
+    '''Socket to connect an Animation node to a Script node'''
     bl_label = 'Animation'
 
     def draw(self, context: Context, layout: UILayout, node: Node, text: str):
