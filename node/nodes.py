@@ -1,7 +1,9 @@
+from typing import Tuple
+
 import bpy
 from bpy.props import EnumProperty, PointerProperty, StringProperty
-from bpy.types import (Action, Collection, Context, Node, NodeTree, Object,
-                       UILayout)
+from bpy.types import (Action, Collection, Context, Node, NodeSocketVirtual,
+                       NodeTree, Object, UILayout)
 
 from .sockets import SourceAnimationSocket, SourceGeometrySocket
 from .tree import SourceNodeTree
@@ -12,7 +14,60 @@ class SourceBaseNode:
 
     @classmethod
     def poll(cls, ntree: NodeTree) -> bool:
-        return ntree.bl_idname == SourceNodeTree.__name__
+        '''Check whether this node can be placed in the given node tree'''
+        return ntree.bl_idname == SourceNodeTree.bl_idname
+
+
+class SourceDynamicNode:
+    '''Mixin class for dynamic nodes'''
+
+    def remove_unlinked_sockets(self, socket_types: Tuple[type]):
+        '''Remove unlinked inputs of the given types'''
+        for socket in self.inputs:
+            if isinstance(socket, socket_types) and not socket.is_linked:
+                self.inputs.remove(socket)
+
+    def ensure_virtual_socket(self) -> NodeSocketVirtual:
+        '''Create a virtual input socket if one does not exist'''
+        for socket in self.inputs:
+            if isinstance(socket, NodeSocketVirtual):
+                return socket
+
+        return self.inputs.new(NodeSocketVirtual.__name__, '')
+
+    def handle_virtual_socket(self, socket_types: Tuple[type]):
+        '''Create new socket for link to virtual socket if there is one'''
+        virtual_socket = self.ensure_virtual_socket()
+
+        if virtual_socket.is_linked:
+            link = virtual_socket.links[0]
+            from_socket = link.from_socket
+
+            self.id_data.links.remove(link)
+
+            if isinstance(from_socket, socket_types):
+                to_socket = self.inputs.new(
+                    type(from_socket).__name__,
+                    type(from_socket).bl_label,
+                )
+
+                self.id_data.links.new(to_socket, from_socket)
+
+                from_index = list(self.inputs).index(virtual_socket)
+                self.inputs.move(from_index, len(self.inputs) - 1)
+
+    def sort_sockets(self, socket_types: Tuple[type]):
+        '''Sort input sockets by type, only affect given types'''
+        socket_table = {cls: [] for cls in socket_types}
+
+        for socket in self.inputs:
+            if isinstance(socket, socket_types):
+                socket_table[type(socket)].append(socket)
+
+        for sockets in socket_table.values():
+            for socket in sockets:
+                from_index = list(self.inputs).index(socket)
+                self.inputs.move(from_index, len(self.inputs) - 2)
 
 
 class SourceGeometryNode(Node, SourceBaseNode):
@@ -192,7 +247,7 @@ class SourceAnimationNode(Node, SourceBaseNode):
             return self.bl_label
 
 
-class SourceScriptNode(Node, SourceBaseNode):
+class SourceScriptNode(Node, SourceBaseNode, SourceDynamicNode):
     '''Node which combines geometry and animation in a script'''
     bl_label = 'Script'
     bl_icon = 'TEXT'
@@ -215,19 +270,22 @@ class SourceScriptNode(Node, SourceBaseNode):
 
     def init(self, context: Context):
         '''Initialize a new node'''
-        self.inputs.new(
-            SourceGeometrySocket.__name__,
-            SourceGeometrySocket.bl_label,
-        )
-
-        self.inputs.new(
-            SourceAnimationSocket.__name__,
-            SourceAnimationSocket.bl_label,
-        )
+        self.ensure_virtual_socket()
 
     def copy(self, node: Node):
         '''Copy values from another node'''
         self.model_name = node.model_name
+
+    def update(self):
+        '''Called when the node tree is updated'''
+        socket_types = (
+            SourceGeometrySocket,
+            SourceAnimationSocket,
+        )
+
+        self.remove_unlinked_sockets(socket_types)
+        self.handle_virtual_socket(socket_types)
+        self.sort_sockets(socket_types)
 
     def draw_buttons(self, context: Context, layout: UILayout):
         '''Draw node properties'''
