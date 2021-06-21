@@ -1,5 +1,5 @@
 import bpy
-from bpy.types import Context, Operator
+from bpy.types import Context, Node, Operator
 
 from ..sdk.file import export_animation
 
@@ -13,7 +13,7 @@ class SOURCENODES_OT_export_animation(Operator):
     node: bpy.props.StringProperty(options={'HIDDEN'})
 
     def execute(self, context: Context) -> set:
-        node = eval(self.node)
+        node: Node = eval(self.node)
         export_animation(node)
 
         return {'FINISHED'}
