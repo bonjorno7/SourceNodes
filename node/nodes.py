@@ -5,11 +5,11 @@ from bpy.props import EnumProperty, PointerProperty, StringProperty
 from bpy.types import (Action, Collection, Context, Node, NodeSocketVirtual,
                        NodeTree, Object, UILayout)
 
-from .sockets import SourceAnimationSocket, SourceGeometrySocket
+from .sockets import SourceSocketAnimation, SourceSocketGeometry
 from .tree import SourceNodeTree
 
 
-class SourceBaseNode:
+class SourceNodeBase:
     '''Base class for Source nodes'''
 
     @classmethod
@@ -18,7 +18,7 @@ class SourceBaseNode:
         return ntree.bl_idname == SourceNodeTree.bl_idname
 
 
-class SourceDynamicNode:
+class SourceNodeDynamic:
     '''Mixin class for dynamic nodes'''
 
     def ensure_virtual_socket(self) -> NodeSocketVirtual:
@@ -64,7 +64,7 @@ class SourceDynamicNode:
                 self.inputs.move(from_index, len(self.inputs) - 2)
 
 
-class SourceGeometryNode(Node, SourceBaseNode):
+class SourceNodeGeometry(Node, SourceNodeBase):
     '''Node which takes geometry from an object or collection'''
     bl_label = 'Geometry'
     bl_icon = 'CUBE'
@@ -133,8 +133,8 @@ class SourceGeometryNode(Node, SourceBaseNode):
     def init(self, context: Context):
         '''Initialize a new node'''
         self.outputs.new(
-            SourceGeometrySocket.__name__,
-            SourceGeometrySocket.bl_label,
+            SourceSocketGeometry.__name__,
+            SourceSocketGeometry.bl_label,
         )
 
     def copy(self, node: Node):
@@ -168,7 +168,7 @@ class SourceGeometryNode(Node, SourceBaseNode):
             return self.bl_label
 
 
-class SourceAnimationNode(Node, SourceBaseNode):
+class SourceNodeAnimation(Node, SourceNodeBase):
     '''Node which takes an action from an object'''
     bl_label = 'Animation'
     bl_icon = 'SEQUENCE'
@@ -215,8 +215,8 @@ class SourceAnimationNode(Node, SourceBaseNode):
     def init(self, context: Context):
         '''Initialize a new node'''
         self.outputs.new(
-            SourceAnimationSocket.__name__,
-            SourceAnimationSocket.bl_label,
+            SourceSocketAnimation.__name__,
+            SourceSocketAnimation.bl_label,
         )
 
     def copy(self, node: Node):
@@ -241,7 +241,7 @@ class SourceAnimationNode(Node, SourceBaseNode):
             return self.bl_label
 
 
-class SourceScriptNode(Node, SourceBaseNode, SourceDynamicNode):
+class SourceNodeScript(Node, SourceNodeBase, SourceNodeDynamic):
     '''Node which combines geometry and animation in a script'''
     bl_label = 'Script'
     bl_icon = 'TEXT'
@@ -273,8 +273,8 @@ class SourceScriptNode(Node, SourceBaseNode, SourceDynamicNode):
     def update(self):
         '''Called when the node tree is updated'''
         socket_types = (
-            SourceGeometrySocket,
-            SourceAnimationSocket,
+            SourceSocketGeometry,
+            SourceSocketAnimation,
         )
 
         self.handle_virtual_socket(socket_types)
@@ -294,9 +294,9 @@ class SourceScriptNode(Node, SourceBaseNode, SourceDynamicNode):
 
 
 classes = (
-    SourceGeometryNode,
-    SourceAnimationNode,
-    SourceScriptNode,
+    SourceNodeGeometry,
+    SourceNodeAnimation,
+    SourceNodeScript,
 )
 
 

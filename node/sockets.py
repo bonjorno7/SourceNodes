@@ -2,7 +2,7 @@ import bpy
 from bpy.types import Context, Node, NodeSocket, UILayout
 
 
-class SourceRemovableSocket:
+class SourceSocketRemovable:
     '''Socket which can be removed by the user'''
 
     def draw_remove_button(self, layout: UILayout):
@@ -16,7 +16,7 @@ class SourceRemovableSocket:
             ).socket = repr(self)
 
 
-class SourceGeometrySocket(NodeSocket, SourceRemovableSocket):
+class SourceSocketGeometry(NodeSocket, SourceSocketRemovable):
     '''Socket to connect a Geometry node to a Body Group or Script node'''
     bl_label = 'Geometry'
 
@@ -30,7 +30,7 @@ class SourceGeometrySocket(NodeSocket, SourceRemovableSocket):
         return (0.4, 0.8, 0.4, 1.0)
 
 
-class SourceAnimationSocket(NodeSocket, SourceRemovableSocket):
+class SourceSocketAnimation(NodeSocket, SourceSocketRemovable):
     '''Socket to connect an Animation node to a Script node'''
     bl_label = 'Animation'
 
@@ -45,8 +45,8 @@ class SourceAnimationSocket(NodeSocket, SourceRemovableSocket):
 
 
 classes = (
-    SourceGeometrySocket,
-    SourceAnimationSocket,
+    SourceSocketGeometry,
+    SourceSocketAnimation,
 )
 
 
