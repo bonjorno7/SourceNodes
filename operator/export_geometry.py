@@ -5,15 +5,17 @@ from ..sdk.file import export_geometry
 
 
 class SOURCENODES_OT_export_geometry(Operator):
+    '''Export the given geometry to a file'''
     bl_idname = 'sourcenodes.export_geometry'
     bl_label = 'Export'
-    bl_description = 'Export the given geometry to a file'
     bl_options = {'REGISTER', 'INTERNAL'}
 
     node: bpy.props.StringProperty(options={'HIDDEN'})
 
     def execute(self, context: Context) -> set:
+        '''Execute the operator'''
         node: Node = eval(self.node)
+
         export_geometry(node)
 
         return {'FINISHED'}
