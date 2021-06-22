@@ -1,12 +1,12 @@
 import bpy
 from bpy.types import Context, Node, Operator
 
-from ..sdk.file import export_animation
+from ..sdk.file import export_body
 
 
-class SOURCENODES_OT_export_animation(Operator):
-    '''Export the given animation to a file'''
-    bl_idname = 'sourcenodes.export_animation'
+class SOURCENODES_OT_export_body(Operator):
+    '''Export the given body to a file'''
+    bl_idname = 'sourcenodes.export_body'
     bl_label = 'Export'
     bl_options = {'REGISTER', 'INTERNAL'}
 
@@ -16,12 +16,12 @@ class SOURCENODES_OT_export_animation(Operator):
         '''Execute the operator'''
         node: Node = eval(self.node)
 
-        export_animation(node)
+        export_body(node)
 
         return {'FINISHED'}
 
 
-classes = (SOURCENODES_OT_export_animation,)
+classes = (SOURCENODES_OT_export_body,)
 
 
 def register():

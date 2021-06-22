@@ -1,12 +1,12 @@
 import bpy
 from bpy.types import Context, Node, Operator
 
-from ..sdk.file import export_geometry
+from ..sdk.file import export_model
 
 
-class SOURCENODES_OT_export_geometry(Operator):
-    '''Export the given geometry to a file'''
-    bl_idname = 'sourcenodes.export_geometry'
+class SOURCENODES_OT_export_model(Operator):
+    '''Export the given model to a file'''
+    bl_idname = 'sourcenodes.export_model'
     bl_label = 'Export'
     bl_options = {'REGISTER', 'INTERNAL'}
 
@@ -16,12 +16,12 @@ class SOURCENODES_OT_export_geometry(Operator):
         '''Execute the operator'''
         node: Node = eval(self.node)
 
-        export_geometry(node)
+        export_model(node)
 
         return {'FINISHED'}
 
 
-classes = (SOURCENODES_OT_export_geometry,)
+classes = (SOURCENODES_OT_export_model,)
 
 
 def register():

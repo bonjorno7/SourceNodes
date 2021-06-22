@@ -5,7 +5,7 @@ from bpy.props import EnumProperty, PointerProperty, StringProperty
 from bpy.types import (Action, Collection, Context, Node, NodeSocketVirtual,
                        NodeTree, Object, UILayout)
 
-from .sockets import SourceSocketAnimation, SourceSocketGeometry
+from .sockets import SourceSocketBody, SourceSocketSequence
 from .tree import SourceNodeTree
 
 
@@ -64,9 +64,9 @@ class SourceNodeDynamic:
                 self.inputs.move(from_index, len(self.inputs) - 2)
 
 
-class SourceNodeGeometry(Node, SourceNodeBase):
+class SourceNodeBody(Node, SourceNodeBase):
     '''Node which takes geometry from an object or collection'''
-    bl_label = 'Geometry'
+    bl_label = 'Body'
     bl_icon = 'CUBE'
 
     command: EnumProperty(
@@ -119,7 +119,7 @@ class SourceNodeGeometry(Node, SourceNodeBase):
         elif self.input_type == 'COLLECTION' and self.collection:
             stem = self.collection.name
         else:
-            stem = 'Geometry'
+            stem = self.bl_label
 
         if self.file_type == 'SMD':
             suffix = '.smd'
@@ -133,8 +133,8 @@ class SourceNodeGeometry(Node, SourceNodeBase):
     def init(self, context: Context):
         '''Initialize a new node'''
         self.outputs.new(
-            SourceSocketGeometry.__name__,
-            SourceSocketGeometry.bl_label,
+            SourceSocketBody.__name__,
+            SourceSocketBody.bl_label,
         )
 
     def copy(self, node: Node):
@@ -156,7 +156,7 @@ class SourceNodeGeometry(Node, SourceNodeBase):
             layout.prop(self, 'collection', text='')
 
         layout.prop(self, 'file_type', text='')
-        layout.operator('sourcenodes.export_geometry').node = repr(self)
+        layout.operator('sourcenodes.export_body').node = repr(self)
 
     def draw_label(self) -> str:
         '''Draw node label'''
@@ -168,9 +168,9 @@ class SourceNodeGeometry(Node, SourceNodeBase):
             return self.bl_label
 
 
-class SourceNodeAnimation(Node, SourceNodeBase):
+class SourceNodeSequence(Node, SourceNodeBase):
     '''Node which takes an action from an object'''
-    bl_label = 'Animation'
+    bl_label = 'Sequence'
     bl_icon = 'SEQUENCE'
 
     command: EnumProperty(
@@ -203,7 +203,7 @@ class SourceNodeAnimation(Node, SourceNodeBase):
         if self.action:
             stem = self.action.name
         else:
-            stem = 'Animation'
+            stem = self.bl_label
 
         if self.file_type == 'SMD':
             suffix = '.smd'
@@ -215,8 +215,8 @@ class SourceNodeAnimation(Node, SourceNodeBase):
     def init(self, context: Context):
         '''Initialize a new node'''
         self.outputs.new(
-            SourceSocketAnimation.__name__,
-            SourceSocketAnimation.bl_label,
+            SourceSocketSequence.__name__,
+            SourceSocketSequence.bl_label,
         )
 
     def copy(self, node: Node):
@@ -231,7 +231,7 @@ class SourceNodeAnimation(Node, SourceNodeBase):
         layout.prop(self, 'action', text='')
 
         layout.prop(self, 'file_type', text='')
-        layout.operator('sourcenodes.export_animation').node = repr(self)
+        layout.operator('sourcenodes.export_sequence').node = repr(self)
 
     def draw_label(self) -> str:
         '''Draw node label'''
@@ -241,9 +241,9 @@ class SourceNodeAnimation(Node, SourceNodeBase):
             return self.bl_label
 
 
-class SourceNodeScript(Node, SourceNodeBase, SourceNodeDynamic):
-    '''Node which combines geometry and animation in a script'''
-    bl_label = 'Script'
+class SourceNodeModel(Node, SourceNodeBase, SourceNodeDynamic):
+    '''Node which combines bodies and sequences into a model'''
+    bl_label = 'Model'
     bl_icon = 'TEXT'
 
     model_name: StringProperty(
@@ -258,7 +258,7 @@ class SourceNodeScript(Node, SourceNodeBase, SourceNodeDynamic):
         if self.model_name:
             stem = self.model_name.split('/')[-1]
         else:
-            stem = 'Script'
+            stem = self.bl_label
 
         return stem + '.qc'
 
@@ -273,8 +273,8 @@ class SourceNodeScript(Node, SourceNodeBase, SourceNodeDynamic):
     def update(self):
         '''Called when the node tree is updated'''
         socket_types = (
-            SourceSocketGeometry,
-            SourceSocketAnimation,
+            SourceSocketBody,
+            SourceSocketSequence,
         )
 
         self.handle_virtual_socket(socket_types)
@@ -283,7 +283,7 @@ class SourceNodeScript(Node, SourceNodeBase, SourceNodeDynamic):
     def draw_buttons(self, context: Context, layout: UILayout):
         '''Draw node properties'''
         layout.prop(self, 'model_name', text='')
-        layout.operator('sourcenodes.export_script').node = repr(self)
+        layout.operator('sourcenodes.export_model').node = repr(self)
 
     def draw_label(self) -> str:
         '''Draw node label'''
@@ -294,9 +294,9 @@ class SourceNodeScript(Node, SourceNodeBase, SourceNodeDynamic):
 
 
 classes = (
-    SourceNodeGeometry,
-    SourceNodeAnimation,
-    SourceNodeScript,
+    SourceNodeBody,
+    SourceNodeSequence,
+    SourceNodeModel,
 )
 
 

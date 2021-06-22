@@ -1,10 +1,10 @@
-from . import export_animation, export_geometry, export_script, remove_socket
+from . import export_body, export_model, export_sequence, remove_socket
 
 modules = (
     remove_socket,
-    export_geometry,
-    export_animation,
-    export_script,
+    export_body,
+    export_sequence,
+    export_model,
 )
 
 

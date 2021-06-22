@@ -1,12 +1,11 @@
 from pathlib import Path
 
-from ..node.nodes import (SourceNodeAnimation, SourceNodeGeometry,
-                          SourceNodeScript)
+from ..node.nodes import SourceNodeBody, SourceNodeModel, SourceNodeSequence
 from . import fbx, qc, smd
 
 
-def export_geometry(node: SourceNodeGeometry):
-    '''Export geometry to a file'''
+def export_body(node: SourceNodeBody):
+    '''Export body to a file'''
     objects = []
 
     if node.input_type == 'OBJECT' and node.object:
@@ -23,23 +22,23 @@ def export_geometry(node: SourceNodeGeometry):
         path = Path.home().joinpath('Desktop', node.file_name)
 
         if node.file_type == 'SMD':
-            smd.export_geometry(path, objects)
+            smd.export_body(path, objects)
         elif node.file_type == 'FBX':
-            fbx.export_geometry(path, objects)
+            fbx.export_body(path, objects)
 
 
-def export_animation(node: SourceNodeAnimation):
-    '''Export animation to a file'''
+def export_sequence(node: SourceNodeSequence):
+    '''Export sequence to a file'''
     if node.action:
         path = Path.home().joinpath('Desktop', node.file_name)
 
         if node.file_type == 'SMD':
-            smd.export_animation(path, node.action)
+            smd.export_sequence(path, node.action)
 
 
-def export_script(node: SourceNodeScript):
-    '''Export script to a file'''
+def export_model(node: SourceNodeModel):
+    '''Export model to a file'''
     if node.model_name:
         path = Path.home().joinpath('Desktop', node.file_name)
 
-        qc.export_script(path, node.model_name)
+        qc.export_model(path, node.model_name)

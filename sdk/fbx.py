@@ -8,8 +8,8 @@ MESH_TYPES = {'CURVE', 'FONT', 'MESH', 'SURFACE'}
 OBJECT_TYPES = MESH_TYPES | {'ARMATURE'}
 
 
-def export_geometry(path: Path, objects: List[Object]):
-    '''Export geometry to an FBX file'''
+def export_body(path: Path, objects: List[Object]):
+    '''Export body to an FBX file'''
     frame_current = bpy.context.scene.frame_current
     bpy.context.scene.frame_current = bpy.context.scene.frame_start
 

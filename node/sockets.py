@@ -16,9 +16,9 @@ class SourceSocketRemovable:
             ).socket = repr(self)
 
 
-class SourceSocketGeometry(NodeSocket, SourceSocketRemovable):
-    '''Socket to connect a Geometry node to a Body Group or Script node'''
-    bl_label = 'Geometry'
+class SourceSocketBody(NodeSocket, SourceSocketRemovable):
+    '''Socket to connect a Body node to a Body Group or Model node'''
+    bl_label = 'Body'
 
     def draw(self, context: Context, layout: UILayout, node: Node, text: str):
         '''Draw the socket name or properties'''
@@ -30,9 +30,9 @@ class SourceSocketGeometry(NodeSocket, SourceSocketRemovable):
         return (0.4, 0.8, 0.4, 1.0)
 
 
-class SourceSocketAnimation(NodeSocket, SourceSocketRemovable):
-    '''Socket to connect an Animation node to a Script node'''
-    bl_label = 'Animation'
+class SourceSocketSequence(NodeSocket, SourceSocketRemovable):
+    '''Socket to connect a Sequence node to a Model node'''
+    bl_label = 'Sequence'
 
     def draw(self, context: Context, layout: UILayout, node: Node, text: str):
         '''Draw the socket name or properties'''
@@ -45,8 +45,8 @@ class SourceSocketAnimation(NodeSocket, SourceSocketRemovable):
 
 
 classes = (
-    SourceSocketGeometry,
-    SourceSocketAnimation,
+    SourceSocketBody,
+    SourceSocketSequence,
 )
 
 
