@@ -5,7 +5,8 @@ from bpy.props import EnumProperty, PointerProperty, StringProperty
 from bpy.types import (Action, Collection, Context, Node, NodeSocketVirtual,
                        NodeTree, Object, UILayout)
 
-from .sockets import SourceSocketBody, SourceSocketSequence
+from .sockets import (SourceSocketBody, SourceSocketBodygroup,
+                      SourceSocketSequence)
 from .tree import SourceNodeTree
 
 
@@ -168,6 +169,60 @@ class SourceNodeBody(Node, SourceNodeBase):
             return self.bl_label
 
 
+class SourceNodeBodygroup(Node, SourceNodeBase, SourceNodeDynamic):
+    '''Node which takes multiple body inputs'''
+    bl_label = 'Bodygroup'
+    bl_icon = 'GROUP'
+
+    group_name: StringProperty(
+        name='Group Name',
+        description='Name for this bodygroup in the QC',
+        default='bodygroup',
+    )
+
+    @property
+    def folder_name(self) -> str:
+        '''The folder name for this node'''
+        if self.group_name:
+            stem = self.group_name
+        else:
+            stem = self.bl_label
+
+        return stem
+
+    def init(self, context: Context):
+        '''Initialize a new node'''
+        self.ensure_virtual_socket()
+
+        self.outputs.new(
+            SourceSocketBodygroup.__name__,
+            SourceSocketBodygroup.bl_label,
+        )
+
+    def copy(self, node: Node):
+        '''Copy values from another node'''
+        self.group_name = node.group_name
+
+    def update(self):
+        '''Called when the node tree is updated'''
+        socket_types = (SourceSocketBody,)
+
+        self.handle_virtual_socket(socket_types)
+        self.sort_sockets(socket_types)
+
+    def draw_buttons(self, context: Context, layout: UILayout):
+        '''Draw node properties'''
+        layout.prop(self, 'group_name', text='')
+        layout.operator('sourcenodes.export_bodygroup').node = repr(self)
+
+    def draw_label(self) -> str:
+        '''Draw node label'''
+        if self.group_name:
+            return self.group_name
+        else:
+            return self.bl_label
+
+
 class SourceNodeSequence(Node, SourceNodeBase):
     '''Node which takes an action from an object'''
     bl_label = 'Sequence'
@@ -274,6 +329,7 @@ class SourceNodeModel(Node, SourceNodeBase, SourceNodeDynamic):
         '''Called when the node tree is updated'''
         socket_types = (
             SourceSocketBody,
+            SourceSocketBodygroup,
             SourceSocketSequence,
         )
 
@@ -295,6 +351,7 @@ class SourceNodeModel(Node, SourceNodeBase, SourceNodeDynamic):
 
 classes = (
     SourceNodeBody,
+    SourceNodeBodygroup,
     SourceNodeSequence,
     SourceNodeModel,
 )

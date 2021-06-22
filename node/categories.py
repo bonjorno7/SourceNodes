@@ -1,7 +1,8 @@
 import nodeitems_utils
 from nodeitems_utils import NodeCategory, NodeItem
 
-from .nodes import SourceNodeBody, SourceNodeModel, SourceNodeSequence
+from .nodes import (SourceNodeBody, SourceNodeBodygroup, SourceNodeModel,
+                    SourceNodeSequence)
 from .tree import SourceNodeTree
 
 
@@ -20,6 +21,7 @@ node_categories = [
         'Nodes',
         items=[
             NodeItem(SourceNodeBody.__name__),
+            NodeItem(SourceNodeBodygroup.__name__),
             NodeItem(SourceNodeSequence.__name__),
             NodeItem(SourceNodeModel.__name__),
         ],

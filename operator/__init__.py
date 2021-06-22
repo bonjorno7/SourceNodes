@@ -1,8 +1,10 @@
-from . import export_body, export_model, export_sequence, remove_socket
+from . import (export_body, export_bodygroup, export_model, export_sequence,
+               remove_socket)
 
 modules = (
     remove_socket,
     export_body,
+    export_bodygroup,
     export_sequence,
     export_model,
 )
