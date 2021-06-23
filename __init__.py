@@ -10,11 +10,13 @@ bl_info = {
     'tracker_url': 'https://github.com/bonjorno7/SourceNodes/issues',
 }
 
-from . import node, operator
+from . import node, operator, props, ui
 
 modules = (
+    props,
     node,
     operator,
+    ui,
 )
 
 
