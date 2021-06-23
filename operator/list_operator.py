@@ -88,18 +88,3 @@ class SOURCENODES_OT_list_operator(bpy.types.Operator):
         setattr(parent, index_name, index)
 
         return {'FINISHED'}
-
-
-classes = (SOURCENODES_OT_list_operator,)
-
-
-def register():
-    '''Register this module'''
-    for cls in classes:
-        bpy.utils.register_class(cls)
-
-
-def unregister():
-    '''Unregister this module'''
-    for cls in reversed(classes):
-        bpy.utils.unregister_class(cls)

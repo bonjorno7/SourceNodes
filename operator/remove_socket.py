@@ -20,18 +20,3 @@ class SOURCENODES_OT_remove_socket(Operator):
             socket.node.inputs.remove(socket)
 
         return {'FINISHED'}
-
-
-classes = (SOURCENODES_OT_remove_socket,)
-
-
-def register():
-    '''Register this module'''
-    for cls in classes:
-        bpy.utils.register_class(cls)
-
-
-def unregister():
-    '''Unregister this module'''
-    for cls in reversed(classes):
-        bpy.utils.unregister_class(cls)
