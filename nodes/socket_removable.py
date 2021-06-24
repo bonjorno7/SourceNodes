@@ -1,7 +1,7 @@
 from bpy.types import UILayout
 
 
-class SourceSocketRemovable:
+class SOURCENODES_socket_removable:
     '''Socket which can be removed by the user'''
 
     def draw_remove_button(self, layout: UILayout):

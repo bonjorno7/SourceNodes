@@ -1,31 +1,31 @@
-import nodeitems_utils
+from bpy.types import Context
 from nodeitems_utils import NodeCategory, NodeItem
 
-from .node_body import SourceNodeBody
-from .node_bodygroup import SourceNodeBodygroup
-from .node_model import SourceNodeModel
-from .node_sequence import SourceNodeSequence
-from .tree import SourceNodeTree
+from .node_body import SOURCENODES_node_body
+from .node_bodygroup import SOURCENODES_node_bodygroup
+from .node_model import SOURCENODES_node_model
+from .node_sequence import SOURCENODES_node_sequence
+from .tree import SOURCENODES_node_tree
 
 
-class SourceNodeCategory(NodeCategory):
-    '''Source Node Category'''
+class SOURCENODES_node_category(NodeCategory):
+    '''Category for Source nodes'''
 
     @classmethod
-    def poll(cls, context):
+    def poll(cls, context: Context):
         '''Whether this category should show up in a given node tree'''
-        return context.space_data.tree_type == SourceNodeTree.__name__
+        return context.space_data.tree_type == SOURCENODES_node_tree.__name__
 
 
-node_categories = [
-    SourceNodeCategory(
-        'SOURCENODES_NODES',
-        'Nodes',
+SOURCENODES_node_categories = [
+    SOURCENODES_node_category(
+        'SOURCENODES_model_nodes',
+        'Model Nodes',
         items=[
-            NodeItem(SourceNodeBody.__name__),
-            NodeItem(SourceNodeBodygroup.__name__),
-            NodeItem(SourceNodeSequence.__name__),
-            NodeItem(SourceNodeModel.__name__),
+            NodeItem(SOURCENODES_node_body.__name__),
+            NodeItem(SOURCENODES_node_bodygroup.__name__),
+            NodeItem(SOURCENODES_node_sequence.__name__),
+            NodeItem(SOURCENODES_node_model.__name__),
         ],
     ),
 ]

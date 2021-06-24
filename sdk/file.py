@@ -1,13 +1,13 @@
 from pathlib import Path
 
-from ..nodes.node_body import SourceNodeBody
-from ..nodes.node_bodygroup import SourceNodeBodygroup
-from ..nodes.node_model import SourceNodeModel
-from ..nodes.node_sequence import SourceNodeSequence
+from ..nodes.node_body import SOURCENODES_node_body
+from ..nodes.node_bodygroup import SOURCENODES_node_bodygroup
+from ..nodes.node_model import SOURCENODES_node_model
+from ..nodes.node_sequence import SOURCENODES_node_sequence
 from . import fbx, qc, smd
 
 
-def export_body(node: SourceNodeBody):
+def export_body(node: SOURCENODES_node_body):
     '''Export body to a file'''
     objects = []
 
@@ -30,17 +30,17 @@ def export_body(node: SourceNodeBody):
             fbx.export_body(path, objects)
 
 
-def export_bodygroup(node: SourceNodeBodygroup):
+def export_bodygroup(node: SOURCENODES_node_bodygroup):
     '''Export the bodies in this group'''
     for socket in node.inputs:
         if socket.is_linked:
             link = socket.links[0]
 
-            if isinstance(link.from_node, SourceNodeBody):
+            if isinstance(link.from_node, SOURCENODES_node_body):
                 export_body(link.from_node)
 
 
-def export_sequence(node: SourceNodeSequence):
+def export_sequence(node: SOURCENODES_node_sequence):
     '''Export sequence to a file'''
     if node.action:
         path = Path.home().joinpath('Desktop', node.file_name)
@@ -49,7 +49,7 @@ def export_sequence(node: SourceNodeSequence):
             smd.export_sequence(path, node.action)
 
 
-def export_model(node: SourceNodeModel):
+def export_model(node: SOURCENODES_node_model):
     '''Export model to a file'''
     if node.model_name:
         path = Path.home().joinpath('Desktop', node.file_name)

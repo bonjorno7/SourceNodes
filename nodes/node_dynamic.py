@@ -3,7 +3,7 @@ from typing import Tuple
 from bpy.types import NodeSocketVirtual
 
 
-class SourceNodeDynamic:
+class SOURCENODES_node_dynamic:
     '''Mixin class for dynamic nodes'''
 
     def ensure_virtual_socket(self) -> NodeSocketVirtual:

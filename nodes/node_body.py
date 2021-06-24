@@ -1,14 +1,14 @@
 from bpy.props import EnumProperty, PointerProperty
 from bpy.types import Collection, Context, Node, Object, UILayout
 
-from .node_base import SourceNodeBase
-from .socket_body import SourceSocketBody
+from .node_base import SOURCENODES_node_base
+from .socket_body import SOURCENODES_socket_body
 
 
-class SourceNodeBody(Node, SourceNodeBase):
+class SOURCENODES_node_body(Node, SOURCENODES_node_base):
     '''Node which takes geometry from an object or collection'''
     bl_label = 'Body'
-    bl_icon = 'CUBE'
+    bl_icon = 'OUTLINER_OB_MESH'
 
     command: EnumProperty(
         name='Command',
@@ -74,8 +74,8 @@ class SourceNodeBody(Node, SourceNodeBase):
     def init(self, context: Context):
         '''Initialize a new node'''
         self.outputs.new(
-            SourceSocketBody.__name__,
-            SourceSocketBody.bl_label,
+            SOURCENODES_socket_body.__name__,
+            SOURCENODES_socket_body.bl_label,
         )
 
     def copy(self, node: Node):

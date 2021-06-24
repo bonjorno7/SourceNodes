@@ -1,25 +1,25 @@
 import bpy
 import nodeitems_utils
 
-from .categories import node_categories
-from .node_body import SourceNodeBody
-from .node_bodygroup import SourceNodeBodygroup
-from .node_model import SourceNodeModel
-from .node_sequence import SourceNodeSequence
-from .socket_body import SourceSocketBody
-from .socket_bodygroup import SourceSocketBodygroup
-from .socket_sequence import SourceSocketSequence
-from .tree import SourceNodeTree
+from .categories import SOURCENODES_node_categories
+from .node_body import SOURCENODES_node_body
+from .node_bodygroup import SOURCENODES_node_bodygroup
+from .node_model import SOURCENODES_node_model
+from .node_sequence import SOURCENODES_node_sequence
+from .socket_body import SOURCENODES_socket_body
+from .socket_bodygroup import SOURCENODES_socket_bodygroup
+from .socket_sequence import SOURCENODES_socket_sequence
+from .tree import SOURCENODES_node_tree
 
 classes = (
-    SourceNodeTree,
-    SourceSocketBody,
-    SourceSocketBodygroup,
-    SourceSocketSequence,
-    SourceNodeBody,
-    SourceNodeBodygroup,
-    SourceNodeSequence,
-    SourceNodeModel,
+    SOURCENODES_node_tree,
+    SOURCENODES_socket_body,
+    SOURCENODES_socket_bodygroup,
+    SOURCENODES_socket_sequence,
+    SOURCENODES_node_body,
+    SOURCENODES_node_bodygroup,
+    SOURCENODES_node_sequence,
+    SOURCENODES_node_model,
 )
 
 
@@ -28,7 +28,10 @@ def register():
     for cls in classes:
         bpy.utils.register_class(cls)
 
-    nodeitems_utils.register_node_categories('SOURCENODES', node_categories)
+    nodeitems_utils.register_node_categories(
+        'SOURCENODES',
+        SOURCENODES_node_categories,
+    )
 
 
 def unregister():

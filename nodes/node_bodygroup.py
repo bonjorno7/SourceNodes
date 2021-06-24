@@ -1,16 +1,20 @@
 from bpy.props import StringProperty
 from bpy.types import Context, Node, UILayout
 
-from .node_base import SourceNodeBase
-from .node_dynamic import SourceNodeDynamic
-from .socket_body import SourceSocketBody
-from .socket_bodygroup import SourceSocketBodygroup
+from .node_base import SOURCENODES_node_base
+from .node_dynamic import SOURCENODES_node_dynamic
+from .socket_body import SOURCENODES_socket_body
+from .socket_bodygroup import SOURCENODES_socket_bodygroup
 
 
-class SourceNodeBodygroup(Node, SourceNodeBase, SourceNodeDynamic):
+class SOURCENODES_node_bodygroup(
+        Node,
+        SOURCENODES_node_base,
+        SOURCENODES_node_dynamic,
+):
     '''Node which takes multiple body inputs'''
     bl_label = 'Bodygroup'
-    bl_icon = 'GROUP'
+    bl_icon = 'OUTLINER_COLLECTION'
 
     group_name: StringProperty(
         name='Group Name',
@@ -33,8 +37,8 @@ class SourceNodeBodygroup(Node, SourceNodeBase, SourceNodeDynamic):
         self.ensure_virtual_socket()
 
         self.outputs.new(
-            SourceSocketBodygroup.__name__,
-            SourceSocketBodygroup.bl_label,
+            SOURCENODES_socket_bodygroup.__name__,
+            SOURCENODES_socket_bodygroup.bl_label,
         )
 
     def copy(self, node: Node):
@@ -43,7 +47,7 @@ class SourceNodeBodygroup(Node, SourceNodeBase, SourceNodeDynamic):
 
     def update(self):
         '''Called when the node tree is updated'''
-        socket_types = (SourceSocketBody,)
+        socket_types = (SOURCENODES_socket_body,)
 
         self.handle_virtual_socket(socket_types)
         self.sort_sockets(socket_types)

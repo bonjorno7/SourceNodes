@@ -2,7 +2,7 @@ import bpy
 from bpy.types import NodeReroute, NodeTree
 
 
-class SourceNodeTree(NodeTree):
+class SOURCENODES_node_tree(NodeTree):
     '''Node based export for Source models'''
     bl_label = 'Source Nodes'
     bl_icon = 'FILE_3D'

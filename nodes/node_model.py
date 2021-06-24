@@ -1,17 +1,21 @@
 from bpy.props import StringProperty
 from bpy.types import Context, Node, UILayout
 
-from .node_base import SourceNodeBase
-from .node_dynamic import SourceNodeDynamic
-from .socket_body import SourceSocketBody
-from .socket_bodygroup import SourceSocketBodygroup
-from .socket_sequence import SourceSocketSequence
+from .node_base import SOURCENODES_node_base
+from .node_dynamic import SOURCENODES_node_dynamic
+from .socket_body import SOURCENODES_socket_body
+from .socket_bodygroup import SOURCENODES_socket_bodygroup
+from .socket_sequence import SOURCENODES_socket_sequence
 
 
-class SourceNodeModel(Node, SourceNodeBase, SourceNodeDynamic):
+class SOURCENODES_node_model(
+        Node,
+        SOURCENODES_node_base,
+        SOURCENODES_node_dynamic,
+):
     '''Node which combines bodies and sequences into a model'''
     bl_label = 'Model'
-    bl_icon = 'TEXT'
+    bl_icon = 'PROPERTIES'
 
     model_name: StringProperty(
         name='Model Name',
@@ -40,9 +44,9 @@ class SourceNodeModel(Node, SourceNodeBase, SourceNodeDynamic):
     def update(self):
         '''Called when the node tree is updated'''
         socket_types = (
-            SourceSocketBody,
-            SourceSocketBodygroup,
-            SourceSocketSequence,
+            SOURCENODES_socket_body,
+            SOURCENODES_socket_bodygroup,
+            SOURCENODES_socket_sequence,
         )
 
         self.handle_virtual_socket(socket_types)

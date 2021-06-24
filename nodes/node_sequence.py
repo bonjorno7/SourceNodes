@@ -1,11 +1,11 @@
 from bpy.props import EnumProperty, PointerProperty
 from bpy.types import Action, Context, Node, UILayout
 
-from .node_base import SourceNodeBase
-from .socket_sequence import SourceSocketSequence
+from .node_base import SOURCENODES_node_base
+from .socket_sequence import SOURCENODES_socket_sequence
 
 
-class SourceNodeSequence(Node, SourceNodeBase):
+class SOURCENODES_node_sequence(Node, SOURCENODES_node_base):
     '''Node which takes an action from an object'''
     bl_label = 'Sequence'
     bl_icon = 'SEQUENCE'
@@ -52,8 +52,8 @@ class SourceNodeSequence(Node, SourceNodeBase):
     def init(self, context: Context):
         '''Initialize a new node'''
         self.outputs.new(
-            SourceSocketSequence.__name__,
-            SourceSocketSequence.bl_label,
+            SOURCENODES_socket_sequence.__name__,
+            SOURCENODES_socket_sequence.bl_label,
         )
 
     def copy(self, node: Node):

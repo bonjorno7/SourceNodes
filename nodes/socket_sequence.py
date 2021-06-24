@@ -1,9 +1,9 @@
 from bpy.types import Context, Node, NodeSocket, UILayout
 
-from .socket_removable import SourceSocketRemovable
+from .socket_removable import SOURCENODES_socket_removable
 
 
-class SourceSocketSequence(NodeSocket, SourceSocketRemovable):
+class SOURCENODES_socket_sequence(NodeSocket, SOURCENODES_socket_removable):
     '''Socket to connect a Sequence node to a Model node'''
     bl_label = 'Sequence'
 
