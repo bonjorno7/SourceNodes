@@ -1,7 +1,9 @@
 from pathlib import Path
 
-from ..node.nodes import (SourceNodeBody, SourceNodeBodygroup, SourceNodeModel,
-                          SourceNodeSequence)
+from ..nodes.node_body import SourceNodeBody
+from ..nodes.node_bodygroup import SourceNodeBodygroup
+from ..nodes.node_model import SourceNodeModel
+from ..nodes.node_sequence import SourceNodeSequence
 from . import fbx, qc, smd
 
 

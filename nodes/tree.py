@@ -34,18 +34,3 @@ class SourceNodeTree(NodeTree):
         for link in self.links:
             if type(link.from_socket) != type(link.to_socket):
                 link.is_valid = False
-
-
-classes = (SourceNodeTree,)
-
-
-def register():
-    '''Register this module'''
-    for cls in classes:
-        bpy.utils.register_class(cls)
-
-
-def unregister():
-    '''Unregister this module'''
-    for cls in reversed(classes):
-        bpy.utils.unregister_class(cls)
