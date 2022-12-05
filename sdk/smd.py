@@ -1,11 +1,9 @@
 from pathlib import Path
-from typing import List
 
-import bpy
 from bpy.types import Action, Object
 
 
-def export_body(path: Path, objects: List[Object]):
+def export_body(path: Path, objects: list[Object]):
     '''Export body to an SMD file'''
     for object in objects:
         print(object.name)

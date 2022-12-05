@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import List
 
 import bpy
 from bpy.types import Object, TriangulateModifier
@@ -8,7 +7,7 @@ MESH_TYPES = {'CURVE', 'FONT', 'MESH', 'SURFACE'}
 OBJECT_TYPES = MESH_TYPES | {'ARMATURE'}
 
 
-def export_body(path: Path, objects: List[Object]):
+def export_body(path: Path, objects: list[Object]):
     '''Export body to an FBX file'''
     frame_current = bpy.context.scene.frame_current
     bpy.context.scene.frame_current = bpy.context.scene.frame_start
@@ -20,8 +19,8 @@ def export_body(path: Path, objects: List[Object]):
     layer_collection = bpy.context.view_layer.layer_collection.children[-1]
     bpy.context.view_layer.active_layer_collection = layer_collection
 
-    obj_hide_viewport = {}
-    obj_triangulate_mod = {}
+    obj_hide_viewport: dict[Object, bool] = {}
+    obj_triangulate_mod: dict[Object, TriangulateModifier] = {}
 
     for obj in objects:
         if obj.type in OBJECT_TYPES:

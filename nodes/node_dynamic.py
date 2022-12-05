@@ -1,5 +1,3 @@
-from typing import Tuple
-
 from bpy.types import NodeSocketVirtual
 
 
@@ -14,7 +12,7 @@ class SOURCENODES_node_dynamic:
 
         return self.inputs.new(NodeSocketVirtual.__name__, '')
 
-    def handle_virtual_socket(self, socket_types: Tuple[type]):
+    def handle_virtual_socket(self, socket_types: tuple[type]):
         '''Create new socket for link to virtual socket if there is one'''
         virtual_socket = self.ensure_virtual_socket()
 
@@ -35,7 +33,7 @@ class SOURCENODES_node_dynamic:
                 from_index = list(self.inputs).index(virtual_socket)
                 self.inputs.move(from_index, len(self.inputs) - 1)
 
-    def sort_sockets(self, socket_types: Tuple[type]):
+    def sort_sockets(self, socket_types: tuple[type]):
         '''Sort input sockets by type, only affect given types'''
         socket_table = {cls: [] for cls in socket_types}
 

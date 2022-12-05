@@ -1,11 +1,11 @@
-from typing import Any, Tuple
+from typing import Any
 
 from bpy.types import UILayout
 
 from .common import get_prefs
 
 
-def get_list_info(type: str) -> Tuple[str, Any, str, str]:
+def get_list_info(type: str) -> tuple[str, Any, str, str]:
     '''Get the info necessary to draw a list'''
     prefs = get_prefs()
 
